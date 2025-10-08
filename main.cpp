@@ -1,0 +1,129 @@
+#include <iostream>
+using namespace std;
+
+class Account
+{
+private:
+    int accountNumber;
+    double balance;
+    string accountHolder;
+    string dateCreated;
+    bool isActive;
+
+public:
+    Account(int accountNumber, double balance, string accountHolder, string dateCreated, bool isActive)
+    {
+        this->accountNumber = accountNumber;
+        this->balance = balance;
+        this->accountHolder = accountHolder;
+        this->dateCreated = dateCreated;
+        this->isActive = isActive;
+    }
+    void deposite(double amount)
+    {
+        if (amount > 0)
+        {
+            this->balance += amount;
+        }
+        else
+        {
+            cout << "the amount is not valid" << endl;
+        }
+    }
+    void withdraw(double amount)
+    {
+        
+            this->balance -= amount;
+       
+    }
+    void displayAccountInfo()
+    {
+        cout << "**********************************************" << endl;
+        cout << "Account Number: " << this->accountNumber << endl;
+        cout << "Acount balance: " << this->balance << endl;
+        cout << "Acount Holder: " << this->accountHolder << endl;
+        cout << "Acount date of creating: " << this->dateCreated << endl;
+        cout << (isActive ? "the account is acitve" : "the account is not active") << endl;
+        cout << "**********************************************" << endl;
+    }
+    double calculateInterest();
+    double getBalance()
+    {
+        return this->balance;
+    }
+    int getAccountNumber()
+    {
+        return this->accountNumber;
+    }
+};
+class SavingsAcount : public Account
+{
+public:
+    const double IntresetRate = 3.5;
+    const double minimum = 500.0;
+    SavingsAcount(int accountNumber, double balance, string accountHolder, string dateCreated, bool isActive)
+        : Account(accountNumber, balance, accountHolder, dateCreated, isActive) {};
+
+    void withdraw(double ammount)
+    {
+        if (this->getBalance() < this->minimum || ammount<=0)
+        {
+            cout << "Cannot withdraw if balance falls below minimum" << endl;
+        }
+        else
+        {
+            Account::withdraw(ammount);
+        }
+    }
+    double calculateInterest()
+    {
+        return this->getBalance() * IntresetRate / 100;
+    }
+    void applyInterest()
+    {
+        Account::deposite(this->calculateInterest());
+    }
+};
+class CheckingAccount : public Account
+{
+public:
+    const double overdraftLimit = 200;
+    const double transactionFee = 0.50;
+    int freeTransactions;
+    CheckingAccount(int accountNumber, double balance, string accountHolder, string dateCreated, bool isActive, int freeTransactions)
+        : Account(accountNumber, balance, accountHolder, dateCreated, isActive)
+    {
+        this->freeTransactions = freeTransactions;
+    };
+    void withdraw(double amount){
+        if (this->getBalance()-amount >=-this->overdraftLimit)
+        {   
+            Account::withdraw(amount);
+            this->freeTransactions--;
+        }else{
+            cout << "Too broke for that"<<endl;
+        }
+        
+    }
+    double calculateInterest(){
+        return 0;
+    }
+    void deductFee(){
+        if (this->freeTransactions <0)
+        {
+            int overFreeLimit = this->freeTransactions*-1;
+            Account::withdraw(overdraftLimit*this->transactionFee);
+        }
+    }
+};
+int main()
+{
+    // int accountNumber, double balane, string accountHolder, string dateCreated, bool isActive
+    SavingsAcount act1(1, 10000.0, "Mehdi", "2025-8", true);
+    act1.deposite(500.0);
+    act1.withdraw(100.0);
+    act1.displayAccountInfo();
+    act1.applyInterest();
+    act1.displayAccountInfo();
+    return 0;
+}
