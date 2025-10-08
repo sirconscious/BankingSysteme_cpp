@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 class Account
@@ -59,14 +60,14 @@ public:
 class SavingsAcount : public Account
 {
 public:
-    const double IntresetRate = 3.5;
-    const double minimum = 500.0;
+    static const double IntresetRate = 3.5;
+    static const double minimum = 500.0;
     SavingsAcount(int accountNumber, double balance, string accountHolder, string dateCreated, bool isActive)
         : Account(accountNumber, balance, accountHolder, dateCreated, isActive) {};
 
     void withdraw(double ammount)
     {
-        if (this->getBalance() < this->minimum || ammount<=0)
+        if (this->getBalance() < this->minimum )
         {
             cout << "Cannot withdraw if balance falls below minimum" << endl;
         }
@@ -87,8 +88,8 @@ public:
 class CheckingAccount : public Account
 {
 public:
-    const double overdraftLimit = 200;
-    const double transactionFee = 0.50;
+    static const double overdraftLimit = 200;
+    static const double transactionFee = 0.50;
     int freeTransactions;
     CheckingAccount(int accountNumber, double balance, string accountHolder, string dateCreated, bool isActive, int freeTransactions)
         : Account(accountNumber, balance, accountHolder, dateCreated, isActive)
@@ -112,7 +113,7 @@ public:
         if (this->freeTransactions <0)
         {
             int overFreeLimit = this->freeTransactions*-1;
-            Account::withdraw(overdraftLimit*this->transactionFee);
+            Account::withdraw(overFreeLimit*this->transactionFee);
         }
     }
 };
