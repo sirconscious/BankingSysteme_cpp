@@ -1,5 +1,5 @@
 #include <iostream>
-#include <vector>  
+#include <vector>
 #include "Transaction.h"
 using namespace std;
 
@@ -34,9 +34,8 @@ public:
     }
     void withdraw(double amount)
     {
-        
-            this->balance -= amount;
-       
+
+        this->balance -= amount;
     }
     void displayAccountInfo()
     {
@@ -68,7 +67,7 @@ public:
 
     void withdraw(double ammount)
     {
-        if (this->getBalance() < this->minimum )
+        if (this->getBalance() < this->minimum)
         {
             cout << "Cannot withdraw if balance falls below minimum" << endl;
         }
@@ -97,27 +96,92 @@ public:
     {
         this->freeTransactions = freeTransactions;
     };
-    void withdraw(double amount){
-        if (this->getBalance()-amount >=-this->overdraftLimit)
-        {   
+    void withdraw(double amount)
+    {
+        if (this->getBalance() - amount >= -this->overdraftLimit)
+        {
             Account::withdraw(amount);
             this->freeTransactions--;
-        }else{
-            cout << "Too broke for that"<<endl;
         }
-        
+        else
+        {
+            cout << "Too broke for that" << endl;
+        }
     }
-    double calculateInterest(){
+    double calculateInterest()
+    {
         return 0;
     }
-    void deductFee(){
-        if (this->freeTransactions <0)
+    void deductFee()
+    {
+        if (this->freeTransactions < 0)
         {
-            int overFreeLimit = this->freeTransactions*-1;
-            Account::withdraw(overFreeLimit*this->transactionFee);
+            int overFreeLimit = this->freeTransactions * -1;
+            Account::withdraw(overFreeLimit * this->transactionFee);
         }
     }
 };
+
+class Customer
+{
+private:
+    int customerId;
+    string name;
+    string email;
+    string phone;
+    string address;
+    vector<Account *> accounts;
+
+public:
+    Customer(int customerId, string name, string email, string phone, string address)
+    {
+        this->customerId = customerId;
+        this->name = name;
+        this->email = email;
+        this->phone = phone;
+        this->address = address;
+    }
+    void addAccount(Account *acc)
+    {
+        this->accounts.push_back(acc);
+    }
+    void removeAccount(int accountNum)
+    {
+        if (!this->accounts.empty())
+        {
+            for (int i = 0; i < this->accounts.size(); i++)
+            {
+                if (accountNum == this->accounts[i]->getAccountNumber())
+                {
+                    this->accounts.erase(this->accounts.begin() + i);
+                    break;
+                }
+            }
+        }
+    }
+    void displayCustmorInfo(){
+        cout <<"***********CUSTOMER_INFO************"<<endl;
+        cout <<"CUSTOMER_ID: "<< this->customerId <<endl;
+        cout << "NAME: "<<this->name<<endl;
+        cout << "EMAIL: "<<this->email<<endl;
+        cout << "PHONE: "<<this->address<<endl;
+        cout << "**************************************";
+    }     
+    double getTotalBalance(){
+        double totale=0.0;
+        for (int i = 0; i < this->accounts.size(); i++)
+        {
+            totale +=this->accounts[i]->getBalance();
+        }
+        return totale;
+    }
+    void listAccounts(){
+        for (int i = 0; i < this->accounts.size(); i++){
+            this->accounts[i]->displayAccountInfo();
+        }
+    }
+};
+
 int main()
 {
     // int accountNumber, double balane, string accountHolder, string dateCreated, bool isActive
@@ -126,8 +190,8 @@ int main()
     act1.withdraw(100.0);
     act1.displayAccountInfo();
     act1.applyInterest();
-    act1.displayAccountInfo(); 
-       Transaction t1(1, DEPOSIT, 1000.0, "2025-10-09", "Mehdi", "Bank", 6000.0);
+    act1.displayAccountInfo();
+    Transaction t1(1, DEPOSIT, 1000.0, "2025-10-09", "Mehdi", "Bank", 6000.0);
 
     // Use its methods
     t1.displayTransaction();
