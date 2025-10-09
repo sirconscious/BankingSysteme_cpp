@@ -1,5 +1,6 @@
 #include <iostream>
-#include <vector>
+#include <vector>  
+#include "Transaction.h"
 using namespace std;
 
 class Account
@@ -60,8 +61,8 @@ public:
 class SavingsAcount : public Account
 {
 public:
-    static const double IntresetRate = 3.5;
-    static const double minimum = 500.0;
+    static constexpr double IntresetRate = 3.5;
+    static constexpr double minimum = 500.0;
     SavingsAcount(int accountNumber, double balance, string accountHolder, string dateCreated, bool isActive)
         : Account(accountNumber, balance, accountHolder, dateCreated, isActive) {};
 
@@ -88,8 +89,8 @@ public:
 class CheckingAccount : public Account
 {
 public:
-    static const double overdraftLimit = 200;
-    static const double transactionFee = 0.50;
+    static constexpr double overdraftLimit = 200;
+    static constexpr double transactionFee = 0.50;
     int freeTransactions;
     CheckingAccount(int accountNumber, double balance, string accountHolder, string dateCreated, bool isActive, int freeTransactions)
         : Account(accountNumber, balance, accountHolder, dateCreated, isActive)
@@ -125,6 +126,13 @@ int main()
     act1.withdraw(100.0);
     act1.displayAccountInfo();
     act1.applyInterest();
-    act1.displayAccountInfo();
+    act1.displayAccountInfo(); 
+       Transaction t1(1, DEPOSIT, 1000.0, "2025-10-09", "Mehdi", "Bank", 6000.0);
+
+    // Use its methods
+    t1.displayTransaction();
+
+    cout << "Amount: " << t1.get_amount() << endl;
+    cout << "From Account: " << t1.get_fromAcount() << endl;
     return 0;
 }
